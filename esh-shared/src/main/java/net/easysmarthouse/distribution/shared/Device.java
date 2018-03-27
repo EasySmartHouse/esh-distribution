@@ -20,6 +20,9 @@ public class Device implements Serializable {
     private boolean enable = true;
     private String state;
 
+    public Device() {
+    }
+
     public Device(Long id) {
         this.id = id;
     }

@@ -7,8 +7,8 @@
     <groupId>net.easysmarthouse</groupId>
     <artifactId>esh-distribution</artifactId>
     <version>1.0.0-SNAPSHOT</version>
-	
-	<packaging>pom</packaging>
+
+    <packaging>pom</packaging>
 
     <name>esh-distribution</name>
 
@@ -17,14 +17,14 @@
         <artifactId>spring-boot-starter-parent</artifactId>
         <version>2.0.0.RELEASE</version>
     </parent>
-	
-	<modules>
+
+    <modules>
         <module>esh-shared</module>
         <module>esh-storage-node</module>
         <module>esh-client</module>
     </modules>
-	
-	 <properties>
+
+    <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <java.version>1.8</java.version>
         <cucumber.version>1.2.5</cucumber.version>

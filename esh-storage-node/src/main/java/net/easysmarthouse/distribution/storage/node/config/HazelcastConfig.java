@@ -32,6 +32,8 @@ public class HazelcastConfig {
         //Create a map store config for the device information
         MapStoreConfig deviceMapStoreConfig = new MapStoreConfig();
         deviceMapStoreConfig.setImplementation(deviceMapStore);
+        //Enable async storing, by default - 0, that means to write immediately
+        //this much performance
         deviceMapStoreConfig.setWriteDelaySeconds(3);
 
         //Update the device map configuration to use the
@@ -39,8 +41,8 @@ public class HazelcastConfig {
         deviceMapConfig.setMapStoreConfig(deviceMapStoreConfig);
         deviceMapConfig.setName(DEVICES_MAP);
 
-        MapIndexConfig dobFieldIndex = new MapIndexConfig("address", true);
-        deviceMapConfig.addMapIndexConfig(dobFieldIndex);
+        MapIndexConfig addressFieldIndex = new MapIndexConfig("address", true);
+        deviceMapConfig.addMapIndexConfig(addressFieldIndex);
 
         //Add the devices map config to our storage node config
         config.addMapConfig(deviceMapConfig);

@@ -16,6 +16,7 @@ public class ClientConfiguration {
     @Bean(name = "HazelcastClientConfig")
     public ClientConfig clientConfig() {
         ClientConfig clientConfig = new ClientConfig();
+        //unlimited connections (try to reconnect)
         clientConfig.getNetworkConfig().setConnectionAttemptLimit(0);
         return clientConfig;
     }

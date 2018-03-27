@@ -1,4 +1,4 @@
-package net.easysmarthouse.distribution.client.helper;
+package net.easysmarthouse.distribution.storage.node.factory;
 
 import com.hazelcast.core.Hazelcast;
 import com.hazelcast.core.HazelcastInstance;
