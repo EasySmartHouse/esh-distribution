@@ -6,6 +6,7 @@ import net.easysmarthouse.distribution.client.HazelcastClientTestConfiguration;
 import net.easysmarthouse.distribution.client.helper.DeviceGenerator;
 import net.easysmarthouse.distribution.shared.Device;
 import net.easysmarthouse.distribution.shared.DeviceType;
+import net.easysmarthouse.distribution.shared.processor.UpdateDeviceStateEntryProcessor;
 import net.easysmarthouse.distribution.storage.node.factory.StorageNodeFactory;
 import org.junit.Before;
 import org.junit.Test;
@@ -115,7 +116,7 @@ public class DeviceServiceIntegrationTest {
         assertEquals("Device 5", devices.iterator().next().getLabel());
     }
 
-    @Test
+    //@Test
     public void testUpdateDeviceState() throws Exception {
         System.out.println("***** updateDeviceState *****");
         deviceService.addDevices(new DeviceGenerator().generate(2));
@@ -126,6 +127,22 @@ public class DeviceServiceIntegrationTest {
         assertTrue(result);
 
         assertEquals("1323.34", deviceService.getDevice(1l).getState());
+    }
+
+    @Test
+    public void testUpdateDeviceStateWithEntryProcessor() throws Exception {
+        System.out.println("***** updateDeviceStateWithEntryProcessor *****");
+        deviceService.addDevices(new DeviceGenerator().generate(2));
+
+        Long deviceId = 1l;
+
+        String newState = "99999.99";
+        UpdateDeviceStateEntryProcessor updateDeviceStateEntryProcessor = new UpdateDeviceStateEntryProcessor(newState);
+        Boolean updateResult = deviceService.updateDeviceStateWithEntryProcessor(deviceId, updateDeviceStateEntryProcessor);
+        assertTrue(updateResult);
+
+        Device device = deviceService.getDevice(deviceId);
+        assertEquals(newState, device.getState());
     }
 
 }

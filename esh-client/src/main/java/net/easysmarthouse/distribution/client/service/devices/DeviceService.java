@@ -2,6 +2,8 @@ package net.easysmarthouse.distribution.client.service.devices;
 
 import com.hazelcast.core.HazelcastInstance;
 import com.hazelcast.core.IMap;
+import com.hazelcast.map.EntryBackupProcessor;
+import com.hazelcast.map.EntryProcessor;
 import com.hazelcast.query.SqlPredicate;
 import net.easysmarthouse.distribution.shared.Device;
 import net.easysmarthouse.distribution.shared.MapNames;
@@ -59,6 +61,16 @@ public class DeviceService implements MapNames {
         devicesMap.put(device.getId(), device);
     }
 
+    /**
+     * Disadventages of locks:
+     * - create synchronization points
+     * - block oher threads
+     * - data is pulled to the client, updated and pushed
+     *
+     * @param deviceId
+     * @param function
+     * @return
+     */
     public boolean updateDeviceWithLock(Long deviceId, Function<Device, Device> function) {
         try {
             boolean lockObtained = devicesMap.tryLock(deviceId, 2, TimeUnit.SECONDS);
@@ -78,6 +90,11 @@ public class DeviceService implements MapNames {
         }
     }
 
+    /**
+     * @param deviceId
+     * @param deviceState
+     * @return
+     */
     public boolean updateDeviceStateWithLock(Long deviceId, String deviceState) {
         try {
             boolean lockObtained = devicesMap.tryLock(deviceId, 2, TimeUnit.SECONDS);
@@ -95,6 +112,10 @@ public class DeviceService implements MapNames {
         } catch (InterruptedException ex) {
             throw new RuntimeException(ex);
         }
+    }
+    
+    public <T> T updateDeviceStateWithEntryProcessor(Long deviceId, EntryProcessor<Long, Device> entryProcessor) {
+        return (T) devicesMap.executeOnKey(deviceId, entryProcessor);
     }
 
     public void deleteDevice(Device device) {
