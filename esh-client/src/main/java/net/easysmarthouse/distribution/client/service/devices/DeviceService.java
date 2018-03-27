@@ -42,4 +42,12 @@ public class DeviceService implements MapNames {
         devicesMap.putAll(devicesLocalMap);
     }
 
+    public void updateDevice(Device device) {
+        devicesMap.put(device.getId(), device);
+    }
+
+    public void deleteDevice(Device device) {
+        devicesMap.delete(device.getId());
+    }
+
 }
