@@ -4,8 +4,7 @@ import com.hazelcast.core.HazelcastInstance;
 import com.hazelcast.core.IMap;
 import net.easysmarthouse.distribution.client.HazelcastClientTestConfiguration;
 import net.easysmarthouse.distribution.client.helper.DeviceGenerator;
-import net.easysmarthouse.distribution.shared.Device;
-import net.easysmarthouse.distribution.shared.DeviceType;
+import net.easysmarthouse.distribution.shared.*;
 import net.easysmarthouse.distribution.shared.processor.UpdateDeviceStateEntryProcessor;
 import net.easysmarthouse.distribution.storage.node.factory.StorageNodeFactory;
 import org.junit.Before;
@@ -16,10 +15,7 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 import static org.junit.Assert.*;
 
@@ -143,6 +139,25 @@ public class DeviceServiceIntegrationTest {
 
         Device device = deviceService.getDevice(deviceId);
         assertEquals(newState, device.getState());
+    }
+
+    @Test
+    public void testGetSensorEventsOverview() throws Exception {
+        Long sensorId = 1l;
+        Long sensorEventId = 5l;
+
+        Device sensor = new Device(sensorId, "Sensor 1", "DF4563453456346FF", DeviceType.Sensor, "Some sensor");
+        SensorEvent sensorEvent = new SensorEvent(sensorEventId, sensorId, EventType.ValueChanged, new Date(), 5.56);
+        SensorEventKey eventKey = new SensorEventKey(sensorId, sensorEventId);
+
+        hazelcastInstance.getMap(MapNames.SENSOR_EVENTS_MAP).put(eventKey, sensorEvent);
+        hazelcastInstance.getMap(MapNames.DEVICES_MAP).put(sensor.getId(), sensor);
+
+        SensorEventsOverview eventsOverview = deviceService.getSensorEventsOverview(sensorId);
+        assertNotNull(eventsOverview);
+        assertEquals("Sensor 1", eventsOverview.getDeviceLabel());
+        assertEquals(1, eventsOverview.getEvents().size());
+        assertEquals(EventType.ValueChanged, eventsOverview.getEvents().get(0).getEventType());
     }
 
 }

@@ -7,6 +7,8 @@ import com.hazelcast.map.EntryProcessor;
 import com.hazelcast.query.SqlPredicate;
 import net.easysmarthouse.distribution.shared.Device;
 import net.easysmarthouse.distribution.shared.MapNames;
+import net.easysmarthouse.distribution.shared.SensorEventsOverview;
+import net.easysmarthouse.distribution.shared.processor.GetSensorEventsOverviewEntryProcessor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
@@ -113,9 +115,14 @@ public class DeviceService implements MapNames {
             throw new RuntimeException(ex);
         }
     }
-    
+
     public <T> T updateDeviceStateWithEntryProcessor(Long deviceId, EntryProcessor<Long, Device> entryProcessor) {
         return (T) devicesMap.executeOnKey(deviceId, entryProcessor);
+    }
+
+    public SensorEventsOverview getSensorEventsOverview(Long deviceId) {
+        return (SensorEventsOverview) devicesMap
+                .executeOnKey(deviceId, new GetSensorEventsOverviewEntryProcessor());
     }
 
     public void deleteDevice(Device device) {
