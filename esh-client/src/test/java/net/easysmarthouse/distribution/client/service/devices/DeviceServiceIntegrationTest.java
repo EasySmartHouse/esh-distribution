@@ -42,7 +42,7 @@ public class DeviceServiceIntegrationTest {
         hazelcastInstance.getMap(DeviceService.DEVICES_MAP).clear();
     }
 
-    //@Test
+    @Test
     public void testAddDevice() {
         System.out.println("***** addDevice *****");
         Device device = new Device(2134l, "Simple switch", "DF4534563456FF", DeviceType.Switch, "Device description");
@@ -53,7 +53,7 @@ public class DeviceServiceIntegrationTest {
         assertEquals(device, devicesMap.get(2134l));
     }
 
-    //@Test
+    @Test
     public void testAddDevices() {
         System.out.println("***** addDevices *****");
         Device device1 = new Device(2134l, "Simple switch 1", "DF4534563456FF", DeviceType.Switch, "Device description 1");
@@ -71,7 +71,7 @@ public class DeviceServiceIntegrationTest {
         assertEquals(device3, deviceMap.get(2136l));
     }
 
-    //@Test
+    @Test
     public void testNoDataLossWithOnlyOneNode() throws Exception {
         System.out.println("***** noDataLossWithOnlyOneNode *****");
         storageNodeFactory.ensureClusterSize(4);
@@ -88,7 +88,7 @@ public class DeviceServiceIntegrationTest {
     }
 
 
-    //@Test
+    @Test
     public void testNoDataLossAfterClusterShutdown() throws Exception {
         System.out.println("***** noDataLossAfterClusterShutdown *****");
         storageNodeFactory.ensureClusterSize(4);
@@ -106,7 +106,7 @@ public class DeviceServiceIntegrationTest {
         assertEquals(maxDevices, deviceMap.size());
     }
 
-    //@Test
+    @Test
     public void testFindDevicesByAddress() throws Exception {
         System.out.println("***** findDevicesByAddress *****");
         deviceService.addDevices(new DeviceGenerator().generate(1000));
@@ -116,7 +116,7 @@ public class DeviceServiceIntegrationTest {
         assertEquals("Device 5", devices.iterator().next().getLabel());
     }
 
-    //@Test
+    @Test
     public void testUpdateDeviceState() throws Exception {
         System.out.println("***** updateDeviceState *****");
         deviceService.addDevices(new DeviceGenerator().generate(2));
