@@ -1,17 +1,16 @@
 package net.easysmarthouse.distribution.storage.node.config;
 
-import com.hazelcast.config.Config;
-import com.hazelcast.config.MapConfig;
-import com.hazelcast.config.MapIndexConfig;
-import com.hazelcast.config.MapStoreConfig;
+import com.hazelcast.config.*;
 import com.hazelcast.core.Hazelcast;
 import com.hazelcast.core.HazelcastInstance;
+import net.easysmarthouse.distribution.storage.node.store.DeviceCommandQueueStore;
 import net.easysmarthouse.distribution.storage.node.store.DeviceMapStore;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 import static net.easysmarthouse.distribution.shared.MapNames.DEVICES_MAP;
+import static net.easysmarthouse.distribution.shared.MapNames.DEVICE_COMMAND_QUEUE;
 
 @Configuration
 public class HazelcastConfig {
@@ -23,8 +22,17 @@ public class HazelcastConfig {
     }
 
     @Bean(name = "StorageNodeConfig")
-    public Config config(DeviceMapStore deviceMapStore) throws Exception {
+    public Config config(DeviceMapStore deviceMapStore, DeviceCommandQueueStore deviceCommandQueueStore) throws Exception {
         Config config = new Config();
+
+        //Device command queue configuration
+        QueueConfig commandQueueConfig = new QueueConfig();
+        commandQueueConfig.setName(DEVICE_COMMAND_QUEUE);
+        QueueStoreConfig queueStoreConfig = new QueueStoreConfig();
+        queueStoreConfig.setStoreImplementation(deviceCommandQueueStore);
+        
+        commandQueueConfig.setQueueStoreConfig(queueStoreConfig);
+        config.addQueueConfig(commandQueueConfig);
 
         //Create a new map configuration for the devices map
         MapConfig deviceMapConfig = new MapConfig();
