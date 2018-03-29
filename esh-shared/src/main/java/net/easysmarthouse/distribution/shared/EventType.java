@@ -4,5 +4,6 @@ public enum EventType {
     StateSet,
     ValueChanged,
     DeviceConnected,
-    DeviceDisconnected
+    DeviceDisconnected,
+    DeviceUpdated
 }
