@@ -40,7 +40,7 @@ public class SensorEventService {
         eventsMap.putAll(eventsLocalMap);
     }
 
-    public Double getAverageSensorValue(Long deviceId, Date start, Date end) {
+    public Double getAverageSensorValue(Long deviceId , Date start, Date end) {
         SensorValueSupplier supplier = new SensorValueSupplier(deviceId, start, end);
         Aggregation<Long, Double, Double> aggregation = Aggregations.doubleAvg();
         return eventsMap.aggregate(supplier, aggregation);

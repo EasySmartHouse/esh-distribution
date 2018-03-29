@@ -5,5 +5,5 @@ import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface HubEventDao extends CrudRepository<HubEvent, Long> {
+public interface  HubEventDao extends CrudRepository<HubEvent, Long> {
 }

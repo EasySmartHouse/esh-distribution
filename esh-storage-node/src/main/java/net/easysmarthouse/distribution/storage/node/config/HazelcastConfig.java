@@ -3,6 +3,7 @@ package net.easysmarthouse.distribution.storage.node.config;
 import com.hazelcast.config.*;
 import com.hazelcast.core.Hazelcast;
 import com.hazelcast.core.HazelcastInstance;
+import net.easysmarthouse.distribution.shared.serialization.SerializationFactory;
 import net.easysmarthouse.distribution.storage.node.listener.HubListener;
 import net.easysmarthouse.distribution.storage.node.store.DeviceCommandQueueStore;
 import net.easysmarthouse.distribution.storage.node.store.DeviceMapStore;
@@ -28,6 +29,13 @@ public class HazelcastConfig {
     public Config config(DeviceMapStore deviceMapStore, DeviceCommandQueueStore deviceCommandQueueStore,
                          HubEventQueueStore hubEventQueueStore, HubListener hubListener) throws Exception {
         Config config = new Config();
+
+        //Serialization factory
+        config.getSerializationConfig()
+                .addPortableFactory(
+                        SerializationFactory.SERIALIZATION_FACTORY_ID,
+                        new SerializationFactory()
+                );
 
         //Hub listener
         ListenerConfig listenerConfig = new ListenerConfig();
